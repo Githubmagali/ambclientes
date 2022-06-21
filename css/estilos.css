@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0px;
+    
+}
+p{
+    font-size: 16px;
+}
+h1{
+    font-size: 36px;
+}
+h3{
+    font-size: 14px;
+    font-weight: 300;
+}
+input, textarea, .btn {
+    border-radius: 15px !important;
+}
+textarea{
+    height: 150px;
+}
+nav .nav-link{
+    color: #282828;
+}
+nav .active{
+    border: 1px solid #E20000;
+    border-radius: 20px;
+}
+#contacto, #inicio {
+    background-image: url(../images/Imagenweb.webp.jpg);
+    background-repeat: no-repeat;
+   background-size: cover;
+}
+
+
+
+#proyectos {
+    background-image: url(../images/int_.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+
+#sobre-mi {
+    background-image: url(../images/Imagenweb.webp.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+
+
+.text-center {
+    text-align: center !important;
+}
+
+#inicio .input-home p {
+    color: rgb(0, 0, 0);
+    font-size: 17px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+#inicio .div-aro{
+    height: 410px;
+}#inicio .aro{
+    height: 400px;
+}
+#inicio .aro:hover{
+    height: 410px;
+}
+#inicio .input-home p{
+    color:rgb(7, 3, 3);
+    font-size: 17px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+
+.form-control {
+
+    border-radius: 14px;
+}
+
+.btn-blanco {
+    background-color: rgb(255, 253, 253);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    border-radius: 20px;
+}
+
+.btn-rojo {
+    background-color: #968e8e;
+    color: rgb(228, 212, 212) !important;
+    font-weight: 100;
+}
+
+.btn-rojo:hover {
+    color: white;
+    background-color: #370a6d;
+}
+
+nav .nav-link {
+    color: #282828;
+}
+
+nav .active {
+    border: 1px solid #2b2323;
+    border-radius: 25px;
+}
+
+#proyectos .card p{
+    height: 90px
+}
+#proyectos footer, #proyectos footer a, #sobre-mi footer, #sobre-mi footer a{
+    color: #000000;
+}
+#proyectos footer .fa-github, #sobre-mi footer .fa-github{
+    font-size: 30px;
+    color: #1f1313;
+}
+
+#proyectos h2{
+    font-size: 16px;
+    text-transform: uppercase;
+    color: rgb(44, 38, 38);
+    padding: 0px;
+    margin: 0px;
+}
+#proyectos p{
+    font-size: 14px;
+}
+#proyectos img{
+    height: 177px;
+}
+
+
+footer, footer a{
+    color: rgba(0, 0, 0, 0.932);
+    font-weight: 100;
+   
+}
+footer .fa-github{
+    font-size: 30px;
+    color: rgb(99, 87, 87);
+}
+footer .fa-linkedin-in{
+    color: #131581;
+    font-size: 20px;
+    border: 0px;
+    height: 32px;
+    width: 32px;
+    text-align: center;
+    padding: 8px 0 0 0;
+    border-radius: 80px;
+    margin: 0 8px;
+}
+.whatsapp {
+    background-color: #42b133;
+    color: white;
+    width: 60px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: 30px;
+    text-align: center;
+    padding: 8px 0 15px 0;
+    right: 80px;
+    position: fixed;
+    bottom: 0px;
+}
+
+@media (max-width: 750px) /*para movil*/ {
+    #inicio {
+        background-image: url(../images/Imagenweb.webp.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    #inicio .input-home p {
+        color: #382121;
+        border: 1px solid #574c4c;
+    }
+}
+
+
+.stack {
+    background: linear-gradient(to right, rgb(116, 106, 105) 0%, rgb(185, 185, 185) 47%, rgb(105, 99, 98) 70%, rgb(94, 86, 85) 100%);
+    box-sizing: border-box;
+}
+
+#idiomas .card{
+    background-color: #887f92;
+    padding: 40px 0;
+    border-radius: 15px;
+}
+
+#idiomas{
+    background-color: #eee;
+   
+}
+#idiomas h2{
+    font-size: 16px;
+    font-weight: 600px;
+    color: #370a6d;
+
+}
+#idiomas ul{
+    padding: 0px;
+    font-size: 14px;
+    color: #282828;
+    list-style-type: none;
+}
+#idiomas {
+    color: rgb(212, 207, 207);
+    font-size: 80px;
+}
+
+
+#sobre-mi .card {
+    height: 182px;
+   
+}
+#formacion h2 {
+    font-weight: 400;
+    font-size: 24px
+}
+#formacion h2, #formacion h4{
+    color: #fff7f7;
+}
+#formacion h3{
+    color: #6A6A6A;
+    font-size: 18px;
+    font-weight: 600;
+
+}
+ #formacion h4{
+    font-size: 17px;
+
+}
+#formacion h5{
+    color: #6A6A6A;
+    font-size: 14px;
+} 
