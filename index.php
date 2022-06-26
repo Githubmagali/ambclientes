@@ -5,25 +5,40 @@ error_reporting(E_ALL);
 
 
 if (file_exists ("archivo.txt")) //Si el archivo existe cargo los clientes en la variable aClientes
-{$strJson=file_get_contents("archivo.txt", true); //LEE ARCHIVOS, va a almacenar todo el contenido en $strJson
-$aClientes=json_decode($strJson, true);} //json_decode recibe los parametros y nos devuelve el array que va almacenar en aclientes
+{$strJson=file_get_contents("archivo.txt");
+$aClientes=json_decode($strJson, true);} //LEE ARCHIVOS, va a almacenar todo el contenido en $strJson$aClientes=json_decode($strJson, true);} //json_decode recibe los parametros y nos devuelve el array que va almacenar en aclientes
 
 else //Si el archivo no existe es porque no hay clientes, entonces es un array vacio
 {$aClientes= array();}
 
+if (isset($_GET ["id"])) //isset define la variable GET
+{$id= $_GET ["id"];} //GEt accede a toda la query string
+else { $id="";} //pregunto por una variable que no existe
+
+if(isset($_GET["do"])&& $_GET["do"]== "eliminar")
+{unset($aClientes[$id]);} //unsset elimina variables o posicion de un array
 
 
- if($_POST){
-    $Nombre = $_POST["txtNombre"]; 
+
+$strJson = json_encode($aClientes); //Convierto un aclientes en json
+
+file_put_contents ("archivo.txt", $strJson); //almaceno el json en el archivo
+
+//header ("Location: index.php"); //borro los datos de la querystring dejandola limpis
+
+
+if($_POST)
+   {$Nombre = $_POST["txtNombre"]; 
     $DNI = $_POST["txtDNI"];
     $Telefono = $_POST["txtTelefono"];
     $Correo = $_POST ["txtCorreo"];
+    $Nombreimagen ="";
     
 
-$aClientes []= array ("Nombre" => $Nombre, "DNI" => $DNI, "Telefono" => $Telefono, "Correo" => $Correo); }
+ $aClientes []= array ("Nombre" => $Nombre, "DNI" => $DNI, "Telefono" => $Telefono, "Correo" => $Correo, "Imagen" => $Nombreimagen); }
 
  //convertir el array de clientes es json
- $strJson = json_encode($aClientes);
+ $strJson1 = json_encode($aClientes);
 
  //almacenar en un archivo.txt en json
  file_put_contents("archivo.txt", $strJson);
@@ -54,21 +69,22 @@ $aClientes []= array ("Nombre" => $Nombre, "DNI" => $DNI, "Telefono" => $Telefon
                     
                     <div>
                         <label for="">Nombre</label>
-                        <input type="text" name="txtNombre" id="txtNombre" class="form-control" required >
+                        <input type="text" name="txtNombre" id="txtNombre" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["Nombre"] :"";?>" >
                     </div>
                     
                     <div>
                         <label for="">DNI:</label>
-                        <input type="text" name="txtDNI" id="txtDNI" class="form-control" required >
+                        <input type="text" name="txtDNI" id="txtDNI" class="form-control" required value= "<?php echo isset ($aClientes [$id])? $aClientes [$id]["DNI"] :"";?>"> 
                     </div>
+                    <?php //isset va a preguntar si existe y sino existe muestro vacio ?>
                     <div>
                         <label for="">Telefono:</label>
-                        <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" required >
+                        <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["Telefono"] : "";?>">
                     </div>
                     <div>
-                        <label for="">Correo:</label>
-                        <input type="text" name="txtCorreo" id="txtCorreo" class="form-control" required >
-                    </div>
+                    <label for="">Correo:</label>
+                    <input type="text" name="txtCorreo" id="txtCorreo" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["Correo"]: "";?>">
+                    </div>  
                     <div>
                         <label for="">Archivo adjunto</label>
                         <input type="file" name="archivo" id="archivo" accept=".jpg, .jpeg, .png">
@@ -87,18 +103,21 @@ $aClientes []= array ("Nombre" => $Nombre, "DNI" => $DNI, "Telefono" => $Telefon
              <th>Nombre</th>
              <th>DNI</th>
              <th>Correo</th>
-             <th>Imagen</th>
              <th>Acciones</th>
- </tr>
+             <th>Imagen</th>
+            </tr>
  
   <?php 
 
-        foreach($aClientes as $cliente){ ?>
+
+        foreach($aClientes as $pos => $cliente){ ?>
   <tr>
       <td><?php echo $cliente["Nombre"]; ?></td>
       <td><?php echo $cliente["DNI"]; ?></td>
       <td><?php echo $cliente["Correo"]; ?></td>
-      <td> <i class="fa-solid fa-trash"></i> </td>
+      <td>
+       <a href="?id=<?php echo $pos; ?>&do=eliminar"> <i class="fa-solid fa-trash"></i></a>
+       <a href="?id=<?php echo $pos; ?>"> <i class="fa-solid fa-pen"> </i></a> </td>
   </tr>
   <?php } ?>
          
