@@ -16,32 +16,53 @@ if (isset($_GET ["id"])) //isset define la variable GET
 else { $id="";} //pregunto por una variable que no existe
 
 if(isset($_GET["do"])&& $_GET["do"]== "eliminar")
-{unset($aClientes[$id]);} //unsset elimina variables o posicion de un array
+{unset($aClientes[$id]); //unsset elimina variables o posicion de un array
 
-
-
-$strJson = json_encode($aClientes); //Convierto un aclientes en json
-
-file_put_contents ("archivo.txt", $strJson); //almaceno el json en el archivo
-
-//header ("Location: index.php"); //borro los datos de la querystring dejandola limpis
-
-
-if($_POST)
-   {$Nombre = $_POST["txtNombre"]; 
-    $DNI = $_POST["txtDNI"];
-    $Telefono = $_POST["txtTelefono"];
-    $Correo = $_POST ["txtCorreo"];
-    $Nombreimagen ="";
-    
-
- $aClientes []= array ("Nombre" => $Nombre, "DNI" => $DNI, "Telefono" => $Telefono, "Correo" => $Correo, "Imagen" => $Nombreimagen); }
-
+ //almaceno el json en el archivo
  //convertir el array de clientes es json
- $strJson1 = json_encode($aClientes);
+ $strJson = json_encode($aClientes);
 
  //almacenar en un archivo.txt en json
  file_put_contents("archivo.txt", $strJson);
+
+header ("Location: index.php");} //borro los datos de la querystring dejandola limpia
+
+
+if($_POST)
+   {$nombre = $_POST["txtnombre"]; 
+    $dni = $_POST["txtdni"];
+    $telefono = $_POST["txttelefono"];
+    $correo = $_POST ["txtcorreo"];
+    $nombreimagen ="";
+
+
+    if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) 
+       
+        {$nombrealeatorio = date("Ymdhmsi") . rand(1000, 2000); //2022/05/17dfecha18:42:37:10:10hora
+        $archivo_tmp = $_FILES["archivo"]["tmp_name"]; //C:\tmp\ghjuy6788765
+        $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+        if($extension == "jpg" || $extension == "png" || $extension == "jpeg")
+            {$nombreimagen = "$nombrealeatorio.$extension";
+            move_uploaded_file($archivo_tmp, "imagenes/$nombreimagen");}}
+       
+      
+    
+        // Si no se subio una imagen y estoy editando conservar en $nombreimagen el nombre de la imagen anterior que esta asociada al cliente que estamos editando
+        if($id >= 0)
+         {if ($_FILES["archivo"]["error"] !== UPLOAD_ERR_OK) 
+            {$nombreimagen = $aClientes[$id]["imagen"];}
+          else 
+            //Si viene una imagen Y hay una imagen anterior, eliminar la anterior
+            {if(file_exists("imagenes/". $aClientes[$id]["imagen"]))
+                {unlink("imagenes/". $aClientes[$id]["imagen"]);}} //unlink elimina la imagen dentro de la carpeta de imaganes
+            
+               
+         
+         
+      $aClientes[$id]= array ("nombre" => $nombre, "dni" => $dni, "telefono" => $telefono, "correo" => $correo, "imagen" => $nombreimagen); }
+      //id si estoy editando
+else {$aClientes[]= array ("nombre" => $nombre, "dni" => $dni, "telefono" => $telefono, "correo" => $correo, "imagen" => $nombreimagen); }
+}//si quiero declarar un cliente 
 
 ?>
 <!DOCTYPE html>
@@ -69,21 +90,21 @@ if($_POST)
                     
                     <div>
                         <label for="">Nombre</label>
-                        <input type="text" name="txtNombre" id="txtNombre" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["Nombre"] :"";?>" >
+                        <input type="text" name="txtnombre" id="txtnombre" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["nombre"] :"";?>" >
                     </div>
                     
                     <div>
-                        <label for="">DNI:</label>
-                        <input type="text" name="txtDNI" id="txtDNI" class="form-control" required value= "<?php echo isset ($aClientes [$id])? $aClientes [$id]["DNI"] :"";?>"> 
+                        <label for="">DNI</label>
+                        <input type="text" name="txtdni" id="txtdni" class="form-control" required value= "<?php echo isset ($aClientes[$id])? $aClientes[$id]["dni"] :"";?>"> 
                     </div>
                     <?php //isset va a preguntar si existe y sino existe muestro vacio ?>
                     <div>
-                        <label for="">Telefono:</label>
-                        <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["Telefono"] : "";?>">
+                        <label for="">Telefono</label>
+                        <input type="text" name="txttelefono" id="txttelefono" class="form-control" required value="<?php echo isset ($aClientes[$id])? $aClientes[$id]["telefono"] : "";?>">
                     </div>
                     <div>
-                    <label for="">Correo:</label>
-                    <input type="text" name="txtCorreo" id="txtCorreo" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["Correo"]: "";?>">
+                    <label for="">Correo</label>
+                    <input type="text" name="txtcorreo" id="txtcorreo" class="form-control" required value="<?php echo isset ($aClientes[$id])? $aClientes[$id]["correo"]: "";?>">
                     </div>  
                     <div>
                         <label for="">Archivo adjunto</label>
@@ -107,17 +128,17 @@ if($_POST)
              <th>Imagen</th>
             </tr>
  
-  <?php 
-
-
-        foreach($aClientes as $pos => $cliente){ ?>
+  <?php   foreach($aClientes as $pos=> $cliente){ ?>
   <tr>
-      <td><?php echo $cliente["Nombre"]; ?></td>
-      <td><?php echo $cliente["DNI"]; ?></td>
-      <td><?php echo $cliente["Correo"]; ?></td>
+      
+      <td><?php echo $cliente["nombre"]; ?></td>
+      <td><?php echo $cliente["dni"]; ?></td>
+      <td><?php echo $cliente["correo"]; ?></td>
       <td>
-       <a href="?id=<?php echo $pos; ?>&do=eliminar"> <i class="fa-solid fa-trash"></i></a>
+       <a href="?id=<?php echo $pos; ?>&do=eliminar"><i class="fa-solid fa-trash"></i></a>
        <a href="?id=<?php echo $pos; ?>"> <i class="fa-solid fa-pen"> </i></a> </td>
+       <td><img src="imagenes/<?php echo $cliente["imagen"]; ?>" class="img-thumbnail"></td>
+      
   </tr>
   <?php } ?>
          
