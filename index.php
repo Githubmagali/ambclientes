@@ -4,8 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-if (file_exists ("archivo.txt")) //Si el archivo existe cargo los clientes en la variable aClientes
-{$strJson=file_get_contents("archivo.txt");
+if (file_exists ("archivo.txt")) //Si el archivo existe cargo los clientes
+{$strJson=file_get_contents("archivo.txt"); //recupera el contenido
 $aClientes=json_decode($strJson, true);} //LEE ARCHIVOS, va a almacenar todo el contenido en $strJson$aClientes=json_decode($strJson, true);} //json_decode recibe los parametros y nos devuelve el array que va almacenar en aclientes
 
 else //Si el archivo no existe es porque no hay clientes, entonces es un array vacio
@@ -22,35 +22,35 @@ if(isset($_GET["do"])&& $_GET["do"]== "eliminar")
  //convertir el array de clientes es json
  $strJson = json_encode($aClientes);
 
- //almacenar en un archivo.txt en json
- file_put_contents("archivo.txt", $strJson);
+ 
+ file_put_contents("archivo.txt", $strJson);//almacenar en un archivo.txt en json
 
 header ("Location: index.php");} //borro los datos de la querystring dejandola limpia
 
 
 if($_POST)
-   {$nombre = $_POST["txtnombre"]; 
-    $dni = $_POST["txtdni"];
-    $telefono = $_POST["txttelefono"];
-    $correo = $_POST ["txtcorreo"];
-    $nombreimagen ="";
+   {$nombre = $_POST["txtNombre"]; 
+    $dni = $_POST["txtDni"];
+    $telefono = $_POST["txtTelefono"];
+    $correo = $_POST ["txtCorreo"];
+    $nombreImagen ="";
 
 
     if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) 
        
-        {$nombrealeatorio = date("Ymdhmsi") . rand(1000, 2000); //2022/05/17dfecha18:42:37:10:10hora
+        {$nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //2022/05/17dfecha18:42:37:10:10hora
         $archivo_tmp = $_FILES["archivo"]["tmp_name"]; //C:\tmp\ghjuy6788765
         $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
         if($extension == "jpg" || $extension == "png" || $extension == "jpeg")
-            {$nombreimagen = "$nombrealeatorio.$extension";
-            move_uploaded_file($archivo_tmp, "imagenes/$nombreimagen");}}
+            {$nombreImagen = "$nombreAleatorio.$extension";
+            move_uploaded_file($archivo_tmp, "imagenes/$nombreImagen");}}
        
       
     
         // Si no se subio una imagen y estoy editando conservar en $nombreimagen el nombre de la imagen anterior que esta asociada al cliente que estamos editando
         if($id >= 0)
          {if ($_FILES["archivo"]["error"] !== UPLOAD_ERR_OK) 
-            {$nombreimagen = $aClientes[$id]["imagen"];}
+            {$nombreImagen = $aClientes[$id]["imagen"];}
           else 
             //Si viene una imagen Y hay una imagen anterior, eliminar la anterior
             {if(file_exists("imagenes/". $aClientes[$id]["imagen"]))
@@ -59,9 +59,17 @@ if($_POST)
                
          
          
-      $aClientes[$id]= array ("nombre" => $nombre, "dni" => $dni, "telefono" => $telefono, "correo" => $correo, "imagen" => $nombreimagen); }
+      $aClientes[$id]= array ("nombre" => $nombre,
+       "dni" => $dni, 
+       "telefono" => $telefono,
+        "correo" => $correo, 
+        "imagen" => $nombreImagen); }
       //id si estoy editando
-else {$aClientes[]= array ("nombre" => $nombre, "dni" => $dni, "telefono" => $telefono, "correo" => $correo, "imagen" => $nombreimagen); }
+else {$aClientes[]= array ("nombre" => $nombre, 
+    "dni" => $dni, 
+    "telefono" => $telefono,
+     "correo" => $correo,
+      "imagen" => $nombreImagen); }
 }//si quiero declarar un cliente 
 
 ?>
@@ -86,34 +94,34 @@ else {$aClientes[]= array ("nombre" => $nombre, "dni" => $dni, "telefono" => $te
         </div>
         <div class="row">
             <div class="col-6">
-                <form action="" method="POST" enctype="multipart/form-data" >
+                <form action="" method="post" enctype="multipart/form-data" >
                     
                     <div>
                         <label for="">Nombre</label>
-                        <input type="text" name="txtnombre" id="txtnombre" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["nombre"] :"";?>" >
+                        <input type="text" name="txtNombre" id="txtNombre" class="form-control" required value="<?php echo isset ($aClientes [$id])? $aClientes [$id]["nombre"] :"";?>" >
                     </div>
                     
                     <div>
                         <label for="">DNI</label>
-                        <input type="text" name="txtdni" id="txtdni" class="form-control" required value= "<?php echo isset ($aClientes[$id])? $aClientes[$id]["dni"] :"";?>"> 
+                        <input type="text" name="txtDni" id="txtDni" class="form-control" required value= "<?php echo isset ($aClientes[$id])? $aClientes[$id]["dni"] :"";?>"> 
                     </div>
                     <?php //isset va a preguntar si existe y sino existe muestro vacio ?>
                     <div>
                         <label for="">Telefono</label>
-                        <input type="text" name="txttelefono" id="txttelefono" class="form-control" required value="<?php echo isset ($aClientes[$id])? $aClientes[$id]["telefono"] : "";?>">
+                        <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" required value="<?php echo isset ($aClientes[$id])? $aClientes[$id]["telefono"] : "";?>">
                     </div>
                     <div>
                     <label for="">Correo</label>
-                    <input type="text" name="txtcorreo" id="txtcorreo" class="form-control" required value="<?php echo isset ($aClientes[$id])? $aClientes[$id]["correo"]: "";?>">
+                    <input type="text" name="txtCorreo" id="txtCorreo" class="form-control" required value="<?php echo isset ($aClientes[$id])? $aClientes[$id]["correo"]: "";?>">
                     </div>  
                     <div>
                         <label for="">Archivo adjunto</label>
                         <input type="file" name="archivo" id="archivo" accept=".jpg, .jpeg, .png">
                         <small class="d-block">Archivos admitidos: .jpg, .jpeg, .png</small>
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                        <a href="index.php" class="btn btn-danger my-2">Nuevo</a>
+                    <div class="py-5 text-center">
+                        <button type="submit" class="btn  btn-success">Guardar</button>
+                        <a href="index.php" class="btn btn-warning my-2">Nuevo</a>
                     </div>
                 </form>
             </div>
@@ -128,23 +136,23 @@ else {$aClientes[]= array ("nombre" => $nombre, "dni" => $dni, "telefono" => $te
              <th>Imagen</th>
             </tr>
  
-  <?php   foreach($aClientes as $pos=> $cliente){ ?>
-  <tr>
+                 <?php   foreach($aClientes as $pos=> $cliente){ ?>
+                <tr>
       
-      <td><?php echo $cliente["nombre"]; ?></td>
-      <td><?php echo $cliente["dni"]; ?></td>
-      <td><?php echo $cliente["correo"]; ?></td>
-      <td>
-       <a href="?id=<?php echo $pos; ?>&do=eliminar"><i class="fa-solid fa-trash"></i></a>
-       <a href="?id=<?php echo $pos; ?>"> <i class="fa-solid fa-pen"> </i></a> </td>
-       <td><img src="imagenes/<?php echo $cliente["imagen"]; ?>" class="img-thumbnail"></td>
+                 <td><?php echo $cliente["nombre"]; ?></td>
+                 <td><?php echo $cliente["dni"]; ?></td>
+                 <td><?php echo $cliente["correo"]; ?></td>
+                <td>
+                <a href="?id=<?php echo $pos; ?>&do=eliminar"><i class="fa-solid fa-trash"></i></a>
+                <a href="?id=<?php echo $pos; ?>"> <i class="fa-solid fa-pen"> </i></a> </td>
+                <td><img src="imagenes/<?php echo $cliente["imagen"]; ?>" class="img-thumbnail"></td>
       
-  </tr>
-  <?php } ?>
+                  </tr>
+                <?php } ?>
          
-        </table>
+                </table>
                 </div>
-            </div>
+        </div>
         
     </main>
 </body>
